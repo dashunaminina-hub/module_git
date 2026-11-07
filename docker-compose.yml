@@ -1,0 +1,7 @@
+services:
+  purchase-service:
+    build: .
+    container_name: mtr_purchase_api
+    ports:
+      - "8000:8000"
+    restart: always

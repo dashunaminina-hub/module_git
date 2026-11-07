@@ -1,0 +1,27 @@
+name: Lab 6 CI
+
+on:
+  push:
+    branches: [ "master", "lab-6" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./lab-6
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 fastapi uvicorn pydantic
+      - name: Lint
+        run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+      - name: Build Docker
+        run: docker build -t purchase-service:test .
